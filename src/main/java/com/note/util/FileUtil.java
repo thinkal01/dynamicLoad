@@ -1,4 +1,4 @@
-package com.note.load;
+package com.note.util;
 
 import java.net.URL;
 
@@ -17,5 +17,9 @@ public class FileUtil {
 
     public static String getSourceFilePath(String fileName) {
         return getResourcePath(SOURCE_DIR + fileName);
+    }
+
+    public static String getSourcePath() {
+        return getResourcePath("") + SOURCE_DIR;
     }
 }

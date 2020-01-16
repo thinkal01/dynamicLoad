@@ -5,9 +5,7 @@ import com.note.vo.ApiAddVO;
 import com.note.vo.CommonResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * api Controller
@@ -28,8 +26,13 @@ public class ApiController {
      * @return 添加成功的用户编号
      */
     @PostMapping("add")
-    public CommonResult add(ApiAddVO apiAddVO) {
+    public CommonResult add(@RequestBody ApiAddVO apiAddVO) {
         return apiService.add(apiAddVO);
+    }
+
+    @GetMapping("callApi")
+    public CommonResult callApi(String apiName) {
+        return apiService.callApi(apiName);
     }
 
 }

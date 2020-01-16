@@ -1,15 +1,20 @@
 package com.note.service.impl;
 
-import com.note.vo.CommonResult;
-import com.note.load.FileUtil;
+import com.note.apifile.ApiMethod;
+import com.note.apifile.ApiParam;
+import com.note.load.ApiObjectManager;
+import com.note.load.ApiSourceManage;
 import com.note.service.ApiService;
+import com.note.util.FileUtil;
 import com.note.vo.ApiAddVO;
+import com.note.vo.CommonResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.util.StringUtils;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -31,15 +36,25 @@ public class ApiServiceImpl implements ApiService {
         }
 
         try {
+            String fileName = className + ".java";
+            String filePath = FileUtil.getSourcePath() + fileName;
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePath));
             // 保存api代码到硬盘
-            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(FileUtil.getSourceFilePath(className)));
             FileCopyUtils.copy(apiCode, bufferedWriter);
             // todo 编译校验
         } catch (Exception e) {
+            log.error("保存失败{}", e);
             return CommonResult.error(500, "保存失败");
         }
 
         return CommonResult.success("成功");
+    }
+
+
+    @Override
+    public CommonResult callApi(String apiName) {
+        ApiMethod apiMethod = ApiObjectManager.getSingleObject(apiName);
+        return apiMethod.invoke(new ApiParam());
     }
 
     /**
